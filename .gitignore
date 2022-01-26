@@ -1,0 +1,4 @@
+.idea
+client/bin
+server/bin
+*.log
