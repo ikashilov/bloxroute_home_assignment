@@ -22,9 +22,9 @@ func init() {
 
 func addItem() {
 	var key, value string
-	fmt.Println("Enter key: ")
+	fmt.Print("Enter key: ")
 	fmt.Scanf("%s", &key) //lint: no err check
-	fmt.Println("Enter value: ")
+	fmt.Print("Enter value: ")
 	fmt.Scanf("%s", &value) //lint: no err check
 
 	bytes, _ := json.Marshal(api.Msg{
@@ -42,7 +42,7 @@ func addItem() {
 
 func delItem() {
 	var key string
-	fmt.Println("Enter item key to delete: ")
+	fmt.Print("Enter item key to delete: ")
 	fmt.Scanf("%s", &key) //lint: no err check
 
 	bytes, _ := json.Marshal(api.Msg{
@@ -57,7 +57,7 @@ func delItem() {
 
 func getItem() {
 	var key string
-	fmt.Println("Enter item key to get: ")
+	fmt.Print("Enter item key to get: ")
 	fmt.Scanf("%s", &key) //lint: no err check
 
 	bytes, _ := json.Marshal(api.Msg{
