@@ -1,7 +1,7 @@
 package main
 
 import (
-	"client/internal/api"
+	"assignmentapp/internal/api"
 	"encoding/json"
 	"fmt"
 	"github.com/nats-io/nats.go"

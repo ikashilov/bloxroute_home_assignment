@@ -1,4 +1,4 @@
-module server
+module assignmentapp
 
 go 1.17
 

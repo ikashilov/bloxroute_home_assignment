@@ -1,11 +1,11 @@
 package main
 
 import (
+	"assignmentapp/internal/api"
+	"assignmentapp/internal/storage"
 	"encoding/json"
 	"os"
 	"os/signal"
-	"server/internal/api"
-	"server/internal/storage"
 	"sync"
 	"syscall"
 
