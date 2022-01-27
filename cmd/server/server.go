@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	logFileName = "../server.log"
+	logFileName = "../../server.log"
 	natsSubject = "foo"
 	nWorkers    = 4
 )

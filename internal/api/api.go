@@ -10,6 +10,8 @@ const (
 type ItemKey string
 type ItemValue string
 
+const EmptyItemValue ItemValue = ""
+
 type Item struct {
 	Key   ItemKey `json:"key"`
 	Value ItemValue `json:"value"`
