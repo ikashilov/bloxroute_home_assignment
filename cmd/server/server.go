@@ -22,8 +22,8 @@ const (
 var (
 	natsClient   *nats.Conn
 	actionLogger *log.Logger
-	logFile      *os.File
-	cache        *storage.Storage
+	logFile      *os.File // need here just to close in main
+	store        *storage.Storage
 	dataChan     chan *nats.Msg
 	doneChan     chan struct{}
 )
@@ -44,7 +44,7 @@ func init() {
 		log.Fatal("fail to nats connect: ", err)
 	}
 
-	cache = storage.New(100)
+	store = storage.New(100)
 	doneChan = make(chan struct{}, 1)
 	dataChan = make(chan *nats.Msg, 1)
 }
@@ -53,7 +53,7 @@ func handleMsg(msg api.Msg) {
 	switch msg.Action {
 	case api.ActionAddItem:
 		log.Debugf("Add item operation requested. Item: %+v", msg.Item)
-		if err := cache.AddItem(msg.Item); err != nil {
+		if err := store.AddItem(msg.Item); err != nil {
 			log.Error("Add item error: ", err)
 		} else {
 			log.Info("Add item success")
@@ -61,7 +61,7 @@ func handleMsg(msg api.Msg) {
 		}
 	case api.ActionDelItem:
 		log.Debugf("Remove item operation requested. Key: %s", msg.Item.Key)
-		if err := cache.RemoveItem(msg.Item.Key); err != nil {
+		if err := store.RemoveItem(msg.Item.Key); err != nil {
 			log.Error("Remove item error: ", err)
 		} else {
 			log.Info("Remove item success")
@@ -69,7 +69,7 @@ func handleMsg(msg api.Msg) {
 		}
 	case api.ActionGetItem:
 		log.Debugf("Get item operation requested. Key: %s", msg.Item.Key)
-		if val, err := cache.GetItem(msg.Item.Key); err != nil {
+		if val, err := store.GetItem(msg.Item.Key); err != nil {
 			log.Error("Get item error: ", err)
 		} else {
 			log.Info("Get item success")
@@ -77,7 +77,7 @@ func handleMsg(msg api.Msg) {
 		}
 	case api.ActionGetAll:
 		log.Debugf("Get all items operation requested")
-		vals := cache.GetAllItems()
+		vals := store.GetAllItems()
 		log.Info("Get all items success")
 		actionLogger.Infof("GetAllItems: %v", vals)
 
@@ -104,12 +104,12 @@ func subscriber() {
 	if err != nil {
 		log.Fatal("fail to nats subscribe: ", err)
 	}
-	log.Info("nats subscribe: ", natsSubject)
+	log.Debug("nats subscribe: ", natsSubject)
 
 	<-doneChan
 
 	sub.Unsubscribe() //lint: no err check
-	log.Info("nats unsubscribe: ", natsSubject)
+	log.Debug("nats unsubscribe: ", natsSubject)
 }
 
 func main() {
